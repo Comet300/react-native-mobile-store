@@ -1,27 +1,22 @@
 # MosorValentinCristian_Project
 
-Magazin online
-Tehnologii ce vor fi folosite:
+Online store
+Technology stack:
 
 -    React Native (Mobile UI)
 -    JavaScript (Mobile UI)
 -    Node.JS (backend)
 -    MySQL (backend)
 -    GraphQL (Api)
--    Stripe.JS (Payments) (future update)
-     Aplicatia consta intr-un magazin online de tipul aplicatiei eMag.
 
-https://play.google.com/store/apps/details?id=ro.emag.android&hl=ro&gl=US
+Main functions:
 
-Functiile principale ale aplicatiei:
+-    Navigating product categories
+-    Filtering products
+-    Ordering
+-    Managing user accounts
+-    Managing products and their data
 
--    Navigarea pe categorii a produselor
--    Filtrarea produselor
--    Plasarea comenzilor (future update)
--    Gestionarea conturilor de utilizator
--    Gestionarea produselor produselor si a caracteristicilor acestora
--    Gestionarea reducerilor si planificarea lor (future update)
-
-Deoarece aplicatia va folosi React Native, aceasta va fi compatibila atat cu dispozitivele IOS cat si cele Android.
-Clientul (React Native, JavaScript) va comunica printr-un API ce va respecta standardul GraphQL implementat pe un server de Node.JS.
-Datele vor fi stocate prin serializare intr-o baza de date MySQL .
+The App is set to use React Native. This ensures the compatibility with both IOS and Android.
+The React Native client communcates via GraphQL with a Node.JS Strapi server.
+The data is serialised in a MySQL instance.
