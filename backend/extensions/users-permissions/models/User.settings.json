@@ -71,6 +71,10 @@
     },
     "name": {
       "type": "string"
+    },
+    "favorites": {
+      "via": "user",
+      "collection": "favorite"
     }
   }
 }

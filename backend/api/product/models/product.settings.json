@@ -93,6 +93,10 @@
         }
       },
       "type": "richtext"
+    },
+    "favorites": {
+      "via": "product",
+      "collection": "favorite"
     }
   }
 }

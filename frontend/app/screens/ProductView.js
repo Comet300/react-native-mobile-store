@@ -56,12 +56,7 @@ const Productview = (props) => {
 	return (
 		<SafeAreaView style={styles.root}>
 			<ScrollView>
-				<LinearGradient
-					style={styles.heightFix}
-					// Background Linear Gradient
-					colors={[Colors.background_gradient_1, Colors.background_gradient_2]}
-					start={{ x: 0, y: 0 }}
-					end={{ x: 1, y: 0 }}>
+				<LinearGradient style={styles.heightFix} colors={[Colors.background_gradient_1, Colors.background_gradient_2]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
 					<NavBar context={{ type: "cart" }} navigation={props.navigation} title={""} />
 
 					<Image style={styles.background_image} source={require("../assets/images/product_bg1.png")}></Image>
@@ -76,42 +71,49 @@ const Productview = (props) => {
 								<Text style={styles.titlu}>{product.title}</Text>
 								<Text style={styles.subtitlu}>{product.subtitle}</Text>
 							</View>
-							<Text style={styles.price}>
-								{product.price} {product.currency.Name}
-							</Text>
 						</View>
 						<View>
 							<View style={styles.reviews}>
-								<Text></Text>
+								<View>
+									<Text>Reviews go here</Text>
+								</View>
 							</View>
-							<View style={styles.controls}>
-								<InputSpinner
-									style={styles.qty}
-									height={30}
-									width={100}
-									buttonTextColor={"#000"}
-									textColor={"#000"}
-									colorRight={"#fff"}
-									colorLeft={"#fff"}
-									colorPress={"#eee"}
-									colorMax={"#fff"}
-									colorMin={"#fff"}
-									max={99}
-									min={1}
-									step={1}
-									value={count}
-									onChange={setCount}
-								/>
 
-								<TouchableHighlight
-									style={styles.cartButton}
-									onPress={() => {
-										alert("cart");
-									}}>
-									<Text>
-										<Text style={styles.cartButtonText}>Cart</Text>
+							<View style={styles.spaceBetweenRow}>
+								<View>
+									<Text style={styles.price}>
+										{product.price} {product.currency.Name}
 									</Text>
-								</TouchableHighlight>
+								</View>
+								<View style={styles.controls}>
+									<InputSpinner
+										style={styles.qty}
+										height={30}
+										width={100}
+										buttonTextColor={"#000"}
+										textColor={"#000"}
+										colorRight={"#fff"}
+										colorLeft={"#fff"}
+										colorPress={"#eee"}
+										colorMax={"#fff"}
+										colorMin={"#fff"}
+										max={99}
+										min={1}
+										step={1}
+										value={count}
+										onChange={setCount}
+									/>
+
+									<TouchableHighlight
+										style={styles.cartButton}
+										onPress={() => {
+											alert("cart");
+										}}>
+										<Text>
+											<Text style={styles.cartButtonText}>Cart</Text>
+										</Text>
+									</TouchableHighlight>
+								</View>
 							</View>
 						</View>
 						<View style={styles.markdownContainer}>
@@ -125,9 +127,9 @@ const Productview = (props) => {
 };
 
 const styles = StyleSheet.create({
-	root: { marginTop: StatusBar.currentHeight + 10 },
+	root: { marginTop: StatusBar.currentHeight + 10, flex: 1 },
 	heightFix: {
-		minHeight: 720,
+		flex: 1,
 	},
 	background_image: {
 		width: win.width * 1.2,
@@ -141,13 +143,11 @@ const styles = StyleSheet.create({
 		width: "100%",
 		backgroundColor: "#fff",
 		marginTop: 460,
-		display: "flex",
-		flexDirection: "row",
 		marginBottom: 10,
-		flexWrap: "wrap",
 	},
 	primaryContent: {
 		padding: 25,
+		paddingBottom: 0,
 	},
 	titlu: { fontSize: 25, fontWeight: "700", marginBottom: 15 },
 	subtitlu: { color: "#777" },
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
 		padding: 25,
 		paddingTop: 10,
 	},
-	reviews: { paddingTop: 30 },
+	reviews: { paddingTop: 30, display: "flex", flexDirection: "row", justifyContent: "flex-end", paddingRight: 20, paddingLeft: 20 },
 	cartButton: {
 		backgroundColor: "#000",
 		borderRadius: 20,
@@ -173,7 +173,9 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center",
-		top: 70,
+		top: 0,
+		right: 80,
+		position: "relative",
 	},
 	qty: {
 		position: "absolute",
@@ -200,6 +202,12 @@ const styles = StyleSheet.create({
 		paddingLeft: 25,
 		paddingRight: 25,
 		paddingBottom: 25,
+	},
+	spaceBetweenRow: {
+		display: "flex",
+		flexDirection: "row",
+		width: "100%",
+		justifyContent: "space-between",
 	},
 });
 

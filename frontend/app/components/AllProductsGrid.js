@@ -6,30 +6,32 @@ import { useQuery, gql } from "@apollo/client";
 import ProductCard from "./ProductCard";
 import Constants from "../config/constants";
 
-function favToggle(arg) {
-	console.log("fav for card set to ", arg);
-}
-
-function mapDataArray(arr, navigation) {
+function mapDataArray(arr, navigation, props) {
 	if (arr.length == 0) return;
-	return arr.map((item) => (
-		<ProductCard
-			navigation={navigation}
-			key={item.id}
-			style={{ ...styles.productCard }}
-			onToggleFav={favToggle}
-			Title={item.title}
-			Subtitle={item.subtitle}
-			Image={{ uri: Constants.serverUrl + item.image[0].url }}
-			Price={item.price}
-			id={item.id}
-		/>
-	));
+	return arr.map((item) => {
+		console.log(item.favorites[0].id);
+		return (
+			<ProductCard
+				navigation={navigation}
+				key={item.id}
+				style={{ ...styles.productCard }}
+				onToggleFav={props.refetch}
+				Title={item.title}
+				Subtitle={item.subtitle}
+				Image={{ uri: Constants.serverUrl + item.image[0].url }}
+				Price={item.price + " " + item.currency.Name}
+				id={item.id}
+				IsOnFavorites={item?.favorites.length > 0}
+				FavoriteId={item.favorites[0]?.id}
+			/>
+		);
+	});
 }
 
-function splitDataOnColumns(data, title, navigation) {
+function splitDataOnColumns(data, title, navigation, props) {
 	let column1 = [];
 	let column2 = [];
+
 	data.forEach((item, index) => {
 		if (index % 2 == 0) column1.push(item);
 		else column2.push(item);
@@ -38,15 +40,15 @@ function splitDataOnColumns(data, title, navigation) {
 		<React.Fragment>
 			<View style={styles.productsColumn}>
 				<Text style={styles.resultText}>{title}</Text>
-				{mapDataArray(column1, navigation)}
+				{mapDataArray(column1, navigation, props)}
 			</View>
-			<View style={styles.productsColumn}>{mapDataArray(column2, navigation)}</View>
+			<View style={styles.productsColumn}>{mapDataArray(column2, navigation, props)}</View>
 		</React.Fragment>
 	);
 }
 
 const AllProductsGrid = (props) => {
-	return <View style={styles.products}>{splitDataOnColumns(props.elements, props.title, props.navigation)}</View>;
+	return <View style={styles.products}>{splitDataOnColumns(props.elements, props.title, props.navigation, props)}</View>;
 };
 
 const styles = StyleSheet.create({

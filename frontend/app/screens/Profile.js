@@ -25,7 +25,11 @@ const Profile = (props) => {
 					<View style={styles.content}>
 						<Image
 							style={styles.profilePic}
-							source={user ? { uri: constants.serverUrl + user.user.profile_pic.formats.small.url } : require(`../assets/images/generic-user.jpg`)}
+							source={
+								user && user.user.profile_pic
+									? { uri: constants.serverUrl + user.user.profile_pic.formats.small.url }
+									: require(`../assets/images/generic-user.jpg`)
+							}
 						/>
 
 						{user ? (

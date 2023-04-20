@@ -17,10 +17,34 @@ import axios from "axios";
 import SignIn from "./app/screens/SignIn";
 import Profile from "./app/screens/Profile";
 import Productview from "./app/screens/ProductView";
+import Register from "./app/screens/Register";
+import ConfirmRegister from "./app/screens/ConfirmRegister";
+import RegisterSuccess from "./app/screens/RegisterSuccess";
+import EmailSentRegister from "./app/screens/EmailSentRegister";
+import Favorites from "./app/screens/Favorites";
+
+import constants from "./app/config/constants";
+import * as Linking from "expo-linking";
+
+const prefix = Linking.makeUrl("/");
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+	const [data, setData] = useState(null);
+	Linking.addEventListener("url", (e) => {
+		// console.log(e);
+	});
+	const linking = {
+		prefixes: [prefix],
+		config: {
+			screens: {
+				Home: "home",
+				ConfirmRegister: "confirmregister",
+			},
+		},
+	};
+
 	StatusBar.setBackgroundColor("#ffffff");
 	StatusBar.setBarStyle("dark-content");
 
@@ -54,26 +78,26 @@ const App = () => {
 		}
 	);
 
+	// setInterval(() => {
+	// 	console.log(state);
+	// }, 500);
+
 	React.useEffect(() => {
-		// Fetch the token from storage then navigate to our appropriate place
 		const bootstrapAsync = async () => {
 			let user;
 			try {
 				user = await SecureStore.getItemAsync("user");
-				// console.log("restoring");
-			} catch (e) {
-				// Restoring token failed
-			}
+			} catch (e) {}
 			dispatch({ type: "RESTORE_TOKEN", user: JSON.parse(user) });
 		};
 		bootstrapAsync();
 	}, []);
 
 	const authContext = React.useMemo(() => ({
-		signIn: async (data) => {
-			axios({
+		signIn: async (data, successCallback, failureCallback) => {
+			await axios({
 				method: "post",
-				url: "http:/192.168.1.107:1337/auth/local",
+				url: `${constants.serverUrl}/auth/local`,
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -82,13 +106,14 @@ const App = () => {
 				.then(async (response) => {
 					await SecureStore.setItemAsync("user", JSON.stringify(response.data));
 					dispatch({ type: "SIGN_IN", user: response.data });
+					successCallback();
+					return true;
 				})
-
 				.catch(function (error) {
-					console.log(error);
+					console.error(error);
+					failureCallback();
 					return false;
 				});
-			return true;
 		},
 		signOut: async () => {
 			await SecureStore.deleteItemAsync("user");
@@ -103,13 +128,13 @@ const App = () => {
 		},
 	}));
 
-	if (state.isLoading) {
+	if (state?.isLoading) {
 		return <Spinner />;
 	}
 
 	return (
 		<ApolloProvider client={Apollo}>
-			<NavigationContainer>
+			<NavigationContainer linking={linking}>
 				<AuthContext.Provider value={authContext}>
 					<ToastProvider>
 						<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
@@ -118,6 +143,10 @@ const App = () => {
 							<Stack.Screen name='ProductView' component={Productview} />
 							<Stack.Screen name='Profile' component={Profile} />
 							<Stack.Screen name='SignIn' component={SignIn} />
+							<Stack.Screen name='Register' component={Register} />
+							<Stack.Screen name='ConfirmRegister' component={ConfirmRegister} />
+							<Stack.Screen name='RegisterSuccess' component={RegisterSuccess} />
+							<Stack.Screen name='Favorites' component={Favorites} />
 						</Stack.Navigator>
 					</ToastProvider>
 				</AuthContext.Provider>

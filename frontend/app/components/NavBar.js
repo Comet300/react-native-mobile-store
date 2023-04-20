@@ -25,9 +25,9 @@ const Navbar = (props) => {
 						<Image
 							style={styles.profile}
 							source={
-								user
+								user && user.user.profile_pic
 									? {
-											uri: constants.serverUrl + user.user.profile_pic.formats.thumbnail.url,
+											uri: constants.serverUrl + user.user.profile_pic?.formats.thumbnail.url,
 									  }
 									: require(`../assets/images/generic-user.jpg`)
 							}
@@ -65,9 +65,9 @@ const ContextItem = (props) => {
 					<Image
 						style={styles.profile}
 						source={
-							props.user
+							props.user && props.user.user.profile_pic
 								? {
-										uri: constants.serverUrl + props.user.user.profile_pic.formats.thumbnail.url,
+										uri: constants.serverUrl + props.user.user.profile_pic?.formats.thumbnail.url,
 								  }
 								: require(`../assets/images/generic-user.jpg`)
 						}

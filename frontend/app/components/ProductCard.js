@@ -1,12 +1,41 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Image, Text, TouchableWithoutFeedback, TouchableHighlight } from "react-native";
+
 import { AuthContext } from "../contexts/AuthContext";
+import { gql, useMutation } from "@apollo/client";
 
 const ProductCard = (props) => {
 	const { getCurrentUser } = React.useContext(AuthContext);
 	const user = getCurrentUser();
 	const { style } = props;
 	const [favState, setFavState] = useState(false);
+
+	const ADD_FAVORITE = gql`
+		mutation addFavorite($user: ID!, $product: ID!) {
+			createFavorite(input: { data: { user: $user, product: $product } }) {
+				favorite {
+					id
+				}
+			}
+		}
+	`;
+
+	const REMOVE_FAVORITE = gql`
+		mutation removeFavorite($id: ID!) {
+			deleteFavorite(input: { where: { id: $id } }) {
+				favorite {
+					id
+				}
+			}
+		}
+	`;
+
+	const [addFavorite] = useMutation(ADD_FAVORITE);
+	const [removeFavorite] = useMutation(REMOVE_FAVORITE);
+
+	React.useEffect(() => {
+		setFavState(props.IsOnFavorites);
+	}, [props.IsOnFavorites]);
 	return (
 		<TouchableWithoutFeedback
 			style={styles.touchWrapper}
@@ -25,13 +54,15 @@ const ProductCard = (props) => {
 					<Text style={styles.productCardPrice}>{props.Price}</Text>
 					<TouchableHighlight
 						onPress={() => {
-							if (user.jwt) {
-								props.onToggleFav(favState);
+							if (user?.jwt) {
+								if (favState) {
+									removeFavorite({ variables: { id: props.FavoriteId }, onCompleted: props.onToggleFav() });
+								} else {
+									addFavorite({ variables: { user: user.user.id, product: props.id }, onCompleted: props.onToggleFav() });
+								}
 								setFavState(!favState);
-								//register favorite
 							} else {
-								//redirect to favorite list
-								//show locked favorite list
+								props.navigation.navigate("Favorites");
 							}
 						}}
 						underlayColor='#ff000066'

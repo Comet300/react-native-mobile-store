@@ -3,32 +3,31 @@ import { SafeAreaView, ScrollView, StatusBar } from "react-native";
 import { View, Text, StyleSheet } from "react-native";
 import { useQuery, gql } from "@apollo/client";
 
+import { AuthContext } from "../contexts/AuthContext";
 import ProductCard from "./ProductCard";
 import Constants from "../config/constants";
 import Spinner from "./Spinner";
 
-function favToggle(arg) {
-	console.log("fav for card set to ", arg);
-}
-
-function mapDataArray(arr, navigation) {
+function mapDataArray(arr, navigation, props) {
 	if (arr.length == 0) return;
 	return arr.map((item) => (
 		<ProductCard
 			navigation={navigation}
 			key={item.id}
 			style={{ ...styles.productCard }}
-			onToggleFav={favToggle}
+			onToggleFav={props.refetch}
 			Title={item.title}
 			Subtitle={item.subtitle}
 			Image={{ uri: Constants.serverUrl + item.image[0].url }}
 			Price={item.price}
 			id={item.id}
+			IsOnFavorites={item?.favorites.length > 0}
+			FavoriteId={item.favorites[0]?.id}
 		/>
 	));
 }
 
-function splitDataOnColumns(data, navigation) {
+function splitDataOnColumns(data, navigation, props) {
 	let column1 = [];
 	let column2 = [];
 	data.products.forEach((item, index) => {
@@ -42,14 +41,17 @@ function splitDataOnColumns(data, navigation) {
 					Found{"\n"}
 					{data.products.length} {data.products.length == 1 ? "product" : "products"}
 				</Text>
-				{mapDataArray(column1, navigation)}
+				{mapDataArray(column1, navigation, props)}
 			</View>
-			<View style={styles.productsColumn}>{mapDataArray(column2, navigation)}</View>
+			<View style={styles.productsColumn}>{mapDataArray(column2, navigation, props)}</View>
 		</React.Fragment>
 	);
 }
 
 const ProductsFoundGrid = (props) => {
+	const { getCurrentUser } = React.useContext(AuthContext);
+	const user = getCurrentUser();
+
 	const PRODUCTS = gql`
 	query GetProducts {
 		products(where:{title_contains:"${props.searchTerm}"}) {
@@ -60,13 +62,16 @@ const ProductsFoundGrid = (props) => {
 				url
 			}
 			price
+      favorites(where:{user:${user.user.id}}){
+          id 
+      }
 		}
 	}
 	`;
 	const { loading, error, data } = useQuery(PRODUCTS);
 	if (loading) return <Spinner />;
 	if (error) return <Text>A problem has occured.</Text>;
-	return <View style={styles.products}>{splitDataOnColumns(data, props.navigation)}</View>;
+	return <View style={styles.products}>{splitDataOnColumns(data, props.navigation, props)}</View>;
 };
 
 const styles = StyleSheet.create({

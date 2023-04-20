@@ -1,19 +1,13 @@
 module.exports = ({ env }) => ({
   email: {
-    provider: "smtp",
+    provider: "sendgrid",
     providerOptions: {
-      host: env("EMAIL_SMTP_HOST"),
-      port: env("EMAIL_SMTP_PORT"),
-      secure: true,
-      username: env("EMAIL_SMTP_USER"),
-      password: env("EMAIL_SMTP_PASS"),
-      rejectUnauthorized: true,
-      requireTLS: true,
-      connectionTimeout: 1,
+      apiKey:
+        "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",
     },
     settings: {
-      from: env("EMAIL_SMTP_USER"),
-      replyTo: env("EMAIL_SMTP_USER"),
+      defaultFrom: "g.valentin.mosor@spiruharet.ro",
+      defaultReplyTo: "g.valentin.mosor@spiruharet.ro",
     },
   },
   comments: {
@@ -85,6 +79,15 @@ module.exports = ({ env }) => ({
           },
         },
       },
+    },
+  },
+  graphql: {
+    config: {
+      endpoint: "/graphql",
+      shadowCRUD: true,
+      playgroundAlways: true,
+      depthLimit: 7,
+      amountLimit: 100,
     },
   },
 });

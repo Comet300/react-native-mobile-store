@@ -25,9 +25,9 @@ const Products = (props) => {
 	const { getCurrentUser } = React.useContext(AuthContext);
 	const user = getCurrentUser();
 
-	const ALLPRODUCTS = gql`
-		query getProductsOfCategory {
-			categories(where:{id: ${props.route.params.category}}) {
+	const ALL_PRODUCTS = gql`
+		query getProductsOfCategory{
+			categories(where: { id: ${props.route.params.category} }) {
 				name
 				products {
 					id
@@ -37,6 +37,13 @@ const Products = (props) => {
 						url
 					}
 					price
+					currency {
+						Name
+					}
+					favorites(where: { user: ${user?.user ? user.user.id : 0} }) {
+							id
+						
+					}
 				}
 			}
 		}
@@ -66,10 +73,11 @@ const Products = (props) => {
 			{ field: "price", val: "150", operator: "_lte" },
 		],
 	});
-	const products = useQuery(ALLPRODUCTS);
-	if (products.loading) return <Spinner />;
-
-	let productsData = products?.data?.categories[0];
+	const category = useQuery(ALL_PRODUCTS, {
+		fetchPolicy: "no-cache",
+	});
+	if (category.loading) return <Spinner />;
+	let productsData = category.data;
 	function showModal(arg) {
 		setScreenState({ ...screenState, modalVisible: true });
 	}
@@ -84,12 +92,12 @@ const Products = (props) => {
 			return (
 				<React.Fragment>
 					<View style={styles.chipContainer}>{mapFiltersToChips(screenState.filters)}</View>
-					<AllProductsGrid navigation={props.navigation} title={productsData.name} elements={productsData.products} />
+					<AllProductsGrid refetch={category.refetch} navigation={props.navigation} title={productsData.name} elements={productsData.categories[0].products} />
 				</React.Fragment>
 			);
 		}
 		if (screenState.contentComponent === 1 && screenState.searchTerm !== "") {
-			return <ProductsFoundGrid navigation={props.navigation} searchTerm={screenState.searchTerm} />;
+			return <ProductsFoundGrid refetch={category.refetch} navigation={props.navigation} searchTerm={screenState.searchTerm} />;
 		}
 	}
 
@@ -108,12 +116,7 @@ const Products = (props) => {
 				<Text>Hello there</Text>
 			</ModalCard>
 			<ScrollView>
-				<LinearGradient
-					// Background Linear Gradient
-					style={styles.heightFix}
-					colors={[Colors.background_gradient_1, Colors.background_gradient_2]}
-					start={{ x: 0, y: 0 }}
-					end={{ x: 1, y: 0 }}>
+				<LinearGradient style={styles.heightFix} colors={[Colors.background_gradient_1, Colors.background_gradient_2]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
 					<NavBar
 						navigation={props.navigation}
 						title={"Search Product"}
@@ -136,7 +139,7 @@ const Products = (props) => {
 };
 
 const styles = StyleSheet.create({
-	root: { marginTop: StatusBar.currentHeight + 10 },
+	root: { marginTop: StatusBar.currentHeight + 10, flex: 1 },
 	content: { paddingLeft: 7.5, paddingRight: 20 },
 	filters: { display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 10 },
 	heightFix: {

@@ -1,8 +1,8 @@
 {
-  "name": "backend",
+  "name": "content",
   "private": true,
   "version": "0.1.0",
-  "description": "A Strapi application",
+  "description": "Content server",
   "scripts": {
     "develop": "strapi develop",
     "start": "strapi start",
@@ -25,12 +25,12 @@
     "strapi-plugin-i18n": "3.6.8",
     "strapi-plugin-upload": "3.6.8",
     "strapi-plugin-users-permissions": "3.6.8",
-    "strapi-provider-email-smtp": "^1.0.3",
+    "strapi-provider-email-sendgrid": "^3.6.8",
     "strapi-utils": "3.6.8",
     "uuid": "^8.3.2"
   },
   "author": {
-    "name": "A Strapi developer"
+    "name": "Valentin Cristian Mosor"
   },
   "strapi": {
     "uuid": "8a64fc33-4df7-4c41-a830-0d74dcc6001c",
