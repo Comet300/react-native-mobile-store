@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Image, Text, TouchableWithoutFeedback, TouchableHighlight } from "react-native";
+import { AuthContext } from "../contexts/AuthContext";
 
 const ProductCard = (props) => {
+	const { getCurrentUser } = React.useContext(AuthContext);
+	const user = getCurrentUser();
 	const { style } = props;
 	const [favState, setFavState] = useState(false);
 	return (
-		<TouchableWithoutFeedback style={styles.touchWrapper} onPress={() => alert("you touched this card")}>
+		<TouchableWithoutFeedback
+			style={styles.touchWrapper}
+			onPress={() => {
+				props.navigation.navigate("ProductView", { id: props.id });
+			}}>
 			<View style={{ ...style, ...styles.root }}>
 				<Image style={styles.cardImage} source={props.Image} />
 				<View style={styles.productCardRow}>
@@ -18,8 +25,14 @@ const ProductCard = (props) => {
 					<Text style={styles.productCardPrice}>{props.Price}</Text>
 					<TouchableHighlight
 						onPress={() => {
-							setFavState(!favState);
-							props.onToggleFav(favState);
+							if (user.jwt) {
+								props.onToggleFav(favState);
+								setFavState(!favState);
+								//register favorite
+							} else {
+								//redirect to favorite list
+								//show locked favorite list
+							}
 						}}
 						underlayColor='#ff000066'
 						style={{ ...styles.productCardFav, backgroundColor: favState ? "#ec3e42" : "#000" }}>

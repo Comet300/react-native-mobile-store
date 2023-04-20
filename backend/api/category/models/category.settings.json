@@ -2,11 +2,13 @@
   "kind": "collectionType",
   "collectionName": "categories",
   "info": {
-    "name": "category"
+    "name": "category",
+    "description": ""
   },
   "options": {
     "increments": true,
-    "timestamps": true
+    "timestamps": true,
+    "draftAndPublish": false
   },
   "attributes": {
     "name": {
@@ -21,10 +23,11 @@
       "collection": "product",
       "dominant": true
     },
-    "comments": {
-      "plugin": "comments",
-      "collection": "comment",
-      "via": "related"
+    "category": {
+      "model": "category"
+    },
+    "icon": {
+      "type": "string"
     }
   }
 }

@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "currencies",
+  "info": {
+    "name": "Currency"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    }
+  }
+}

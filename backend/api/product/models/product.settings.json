@@ -43,7 +43,7 @@
       }
     },
     "image": {
-      "model": "file",
+      "collection": "file",
       "via": "related",
       "allowedTypes": [
         "files",
@@ -62,8 +62,8 @@
       "type": "uid"
     },
     "categories": {
-      "collection": "category",
-      "via": "products"
+      "via": "products",
+      "collection": "category"
     },
     "Custom_field": {
       "type": "component",
@@ -74,6 +74,17 @@
           "localized": true
         }
       }
+    },
+    "ratings": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "type": "json"
+    },
+    "currency": {
+      "model": "currency"
     }
   }
 }

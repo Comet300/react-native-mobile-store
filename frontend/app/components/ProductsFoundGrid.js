@@ -5,27 +5,30 @@ import { useQuery, gql } from "@apollo/client";
 
 import ProductCard from "./ProductCard";
 import Constants from "../config/constants";
+import Spinner from "./Spinner";
 
 function favToggle(arg) {
 	console.log("fav for card set to ", arg);
 }
 
-function mapDataArray(arr) {
+function mapDataArray(arr, navigation) {
 	if (arr.length == 0) return;
 	return arr.map((item) => (
 		<ProductCard
-			key={item.slug}
+			navigation={navigation}
+			key={item.id}
 			style={{ ...styles.productCard }}
 			onToggleFav={favToggle}
 			Title={item.title}
 			Description={item.description}
-			Image={{ uri: Constants.serverUrl + item.image.url }}
+			Image={{ uri: Constants.serverUrl + item.image[0].url }}
 			Price={item.price}
+			id={item.id}
 		/>
 	));
 }
 
-function splitDataOnColumns(data) {
+function splitDataOnColumns(data, navigation) {
 	let column1 = [];
 	let column2 = [];
 	data.products.forEach((item, index) => {
@@ -39,9 +42,9 @@ function splitDataOnColumns(data) {
 					Found{"\n"}
 					{data.products.length} {data.products.length == 1 ? "product" : "products"}
 				</Text>
-				{mapDataArray(column1)}
+				{mapDataArray(column1, navigation)}
 			</View>
-			<View style={styles.productsColumn}>{mapDataArray(column2)}</View>
+			<View style={styles.productsColumn}>{mapDataArray(column2, navigation)}</View>
 		</React.Fragment>
 	);
 }
@@ -50,7 +53,7 @@ const ProductsFoundGrid = (props) => {
 	const PRODUCTS = gql`
 	query GetProducts {
 		products(where:{title_contains:"${props.searchTerm}"}) {
-			slug
+			id
 			title
 			description
 			image {
@@ -61,9 +64,9 @@ const ProductsFoundGrid = (props) => {
 	}
 	`;
 	const { loading, error, data } = useQuery(PRODUCTS);
-	if (loading) return <Text>Loading...</Text>;
+	if (loading) return <Spinner />;
 	if (error) return <Text>A problem has occured.</Text>;
-	return <View style={styles.products}>{splitDataOnColumns(data)}</View>;
+	return <View style={styles.products}>{splitDataOnColumns(data, props.navigation)}</View>;
 };
 
 const styles = StyleSheet.create({

@@ -18,6 +18,7 @@ module.exports = {
   lifecycles: {
     async beforeCreate(data) {
       data.unique_id = ID();
+      data.ratings = [];
     },
   },
 };
