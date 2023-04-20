@@ -5,6 +5,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./app/screens/Home";
 import Products from "./app/screens/Products";
 
+import { ApolloProvider } from "@apollo/client";
+
+import Apollo from "./app/config/apollo";
+
 const Stack = createNativeStackNavigator();
 
 class App extends Component {
@@ -15,12 +19,14 @@ class App extends Component {
 
 	render() {
 		return (
-			<NavigationContainer>
-				<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
-					<Stack.Screen name='Home' component={Home} />
-					<Stack.Screen name='Details' component={Products} />
-				</Stack.Navigator>
-			</NavigationContainer>
+			<ApolloProvider client={Apollo}>
+				<NavigationContainer>
+					<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
+						<Stack.Screen name='Home' component={Home} />
+						<Stack.Screen name='Details' component={Products} />
+					</Stack.Navigator>
+				</NavigationContainer>
+			</ApolloProvider>
 		);
 	}
 }
