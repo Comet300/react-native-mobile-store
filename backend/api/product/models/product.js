@@ -1,4 +1,14 @@
-const slugify = require("slugify");
+"use strict";
+var ID = function () {
+  return Math.random().toString(36).substr(2, 9);
+};
+//NESIGUR PENTRU PRODUCTIE, SUFICIENT PENTRU TESTARI LOCALE
+
+/**
+ * Read the documentation (https://strapi.io/documentation/v3.x/concepts/models.html#lifecycle-hooks)
+ * to customize this model
+ */
+
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#lifecycle-hooks)
  * to customize this model
@@ -7,16 +17,7 @@ const slugify = require("slugify");
 module.exports = {
   lifecycles: {
     async beforeCreate(data) {
-      if (data.Title && data.ProductCode)
-        data.Slug = slugify(data.Title + " " + data.ProductCode, {
-          lower: true,
-        });
-    },
-    async beforeUpdate(params, data) {
-      if (data.Title && data.ProductCode)
-        data.Slug = slugify(data.Title + " " + data.ProductCode, {
-          lower: true,
-        });
+      data.unique_id = ID();
     },
   },
 };

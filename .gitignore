@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+#Specific files
+mobile_design_concept.jpg

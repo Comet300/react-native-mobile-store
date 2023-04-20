@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "products",
   "info": {
-    "name": "Product",
+    "name": "product",
     "description": ""
   },
   "options": {
@@ -10,47 +10,70 @@
     "timestamps": true,
     "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
   "attributes": {
-    "Title": {
+    "title": {
       "type": "string",
-      "required": true
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
-    "Rating": {
-      "type": "decimal",
-      "max": 5,
-      "min": 1,
-      "required": false
+    "description": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
-    "Description": {
-      "type": "richtext",
-      "required": true
+    "price": {
+      "type": "float",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
-    "Images": {
-      "collection": "file",
+    "image": {
+      "model": "file",
       "via": "related",
       "allowedTypes": [
+        "files",
         "images",
         "videos"
       ],
       "plugin": "upload",
-      "required": false,
-      "pluginOptions": {}
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
-    "Price": {
-      "type": "decimal",
-      "required": true
+    "slug": {
+      "type": "uid"
     },
-    "Slug": {
-      "type": "string"
+    "categories": {
+      "collection": "category",
+      "via": "products"
     },
-    "OldPrice": {
-      "type": "decimal"
-    },
-    "ProductCode": {
-      "type": "string",
-      "unique": true,
-      "required": true
+    "Custom_field": {
+      "type": "component",
+      "repeatable": true,
+      "component": "custom.custom-field",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

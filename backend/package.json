@@ -9,29 +9,32 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
-  },
+  "devDependencies": {},
   "dependencies": {
     "knex": "0.21.18",
     "pg": "8.5.1",
-    "slugify": "^1.6.3",
     "strapi": "3.6.8",
     "strapi-admin": "3.6.8",
     "strapi-connector-bookshelf": "3.6.8",
+    "strapi-plugin-comments": "^1.0.4",
     "strapi-plugin-content-manager": "3.6.8",
     "strapi-plugin-content-type-builder": "3.6.8",
     "strapi-plugin-email": "3.6.8",
+    "strapi-plugin-email-designer": "^1.1.7",
+    "strapi-plugin-graphql": "^3.6.8",
     "strapi-plugin-i18n": "3.6.8",
     "strapi-plugin-upload": "3.6.8",
     "strapi-plugin-users-permissions": "3.6.8",
-    "strapi-utils": "3.6.8"
+    "strapi-provider-email-smtp": "^1.0.3",
+    "strapi-utils": "3.6.8",
+    "uuid": "^8.3.2"
   },
   "author": {
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "17934264-1ce2-4c2e-9b44-dd5164a7a37c"
+    "uuid": "8a64fc33-4df7-4c41-a830-0d74dcc6001c",
+    "template": "https://github.com/strapi/strapi-template-ecommerce"
   },
   "engines": {
     "node": ">=10.16.0 <=14.x.x",
