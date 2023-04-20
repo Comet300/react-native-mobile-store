@@ -1,4 +1,4 @@
-# MosorValentinCristian_Project
+# react-native-mobile-store
 
 Online store
 Technology stack:
