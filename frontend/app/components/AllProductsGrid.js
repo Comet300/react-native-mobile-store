@@ -11,7 +11,6 @@ function favToggle(arg) {
 }
 
 function mapDataArray(arr, navigation) {
-	console.log(arr[0]);
 	if (arr.length == 0) return;
 	return arr.map((item) => (
 		<ProductCard
@@ -20,7 +19,7 @@ function mapDataArray(arr, navigation) {
 			style={{ ...styles.productCard }}
 			onToggleFav={favToggle}
 			Title={item.title}
-			Description={item.description}
+			Subtitle={item.subtitle}
 			Image={{ uri: Constants.serverUrl + item.image[0].url }}
 			Price={item.price}
 			id={item.id}

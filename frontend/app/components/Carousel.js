@@ -42,7 +42,7 @@ const Carousel = ({ data }) => {
 	return (
 		<FlatList
 			data={data}
-			style={{ flex: 1, position: "absolute", top: 65 }}
+			style={{ flex: 1, position: "absolute", top: 45 }}
 			renderItem={({ item }) => {
 				return <Slide data={item} />;
 			}}

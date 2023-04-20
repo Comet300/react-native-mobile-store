@@ -20,7 +20,7 @@ function mapDataArray(arr, navigation) {
 			style={{ ...styles.productCard }}
 			onToggleFav={favToggle}
 			Title={item.title}
-			Description={item.description}
+			Subtitle={item.subtitle}
 			Image={{ uri: Constants.serverUrl + item.image[0].url }}
 			Price={item.price}
 			id={item.id}
@@ -55,7 +55,7 @@ const ProductsFoundGrid = (props) => {
 		products(where:{title_contains:"${props.searchTerm}"}) {
 			id
 			title
-			description
+			subtitle
 			image {
 				url
 			}

@@ -27,12 +27,12 @@ const Products = (props) => {
 
 	const ALLPRODUCTS = gql`
 		query getProductsOfCategory {
-			category(id: ${props.route.params.category}) {
+			categories(where:{id: ${props.route.params.category}}) {
 				name
 				products {
 					id
 					title
-					description
+					subtitle
 					image {
 						url
 					}
@@ -50,7 +50,6 @@ const Products = (props) => {
 					style={styles.chip}
 					onClose={() => {
 						setScreenState({ ...screenState, filters: screenState.filters.filter((b) => JSON.stringify(b) != JSON.stringify(a)) });
-						console.log(screenState);
 					}}>
 					{a.field + " " + resolveOperator(a.operator) + " " + a.val}
 				</Chip>
@@ -67,17 +66,15 @@ const Products = (props) => {
 			{ field: "price", val: "150", operator: "_lte" },
 		],
 	});
-
 	const products = useQuery(ALLPRODUCTS);
 	if (products.loading) return <Spinner />;
 
-	let productsData = products.data.category;
+	let productsData = products?.data?.categories[0];
 	function showModal(arg) {
 		setScreenState({ ...screenState, modalVisible: true });
 	}
 
 	function search(arg) {
-		console.log(arg);
 		if (arg === "") setScreenState({ ...screenState, contentComponent: 0, searchTerm: "" });
 		else setScreenState({ ...screenState, contentComponent: 1, searchTerm: arg });
 	}

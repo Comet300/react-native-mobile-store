@@ -10,12 +10,12 @@ const Slide = ({ data }) => {
 		<View
 			key={data.id}
 			style={{
-				height: windowHeight * 0.62,
+				height: windowHeight * 0.49,
 				width: windowWidth,
 				justifyContent: "center",
 				alignItems: "center",
 			}}>
-			<Image source={{ uri: constants.serverUrl + data.url }} style={{ width: windowWidth, height: windowHeight * 0.6 }}></Image>
+			<Image resizeMode='contain' source={{ uri: constants.serverUrl + data.url }} style={{ width: windowWidth, height: windowHeight * 0.45 }}></Image>
 		</View>
 	);
 };

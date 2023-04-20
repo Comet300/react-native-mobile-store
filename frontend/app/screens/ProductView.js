@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Button, StyleSheet, Text, Image, StatusBar, SafeAreaView, Dimensions, ScrollView, TouchableHighlight } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useQuery, gql } from "@apollo/client";
+import { MarkdownView } from "react-native-markdown-view";
+import InputSpinner from "react-native-input-spinner";
 
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -9,77 +11,115 @@ import Colors from "../config/colors";
 import NavBar from "../components/NavBar";
 import Spinner from "../components/Spinner";
 import Carousel from "../components/Carousel";
+import Highlightcell from "../components/HighlightCell";
+import constants from "../config/constants";
 
 const win = Dimensions.get("window");
 const bgImageRatio = win.width / 5304;
 
+function mapHighlightsToElements(highlights) {
+	let n = 1;
+	return highlights.map((highlight) => <Highlightcell key={n++} icon={highlight.icon} label={highlight.title} />);
+}
+
 const Productview = (props) => {
-	// const slideList = Array.from({ length: 5 }).map((_, i) => {
-	// 	return {
-	// 		id: i,
-	// 		image: `https://picsum.photos/1440/2842?random=${i}`,
-	// 	};
-	// });
+	const { count, setCount } = useState(1);
 
 	const PRODUCT = gql`
 	query getProduct{
-		product(id:${props.route.params.id}){
+		products(where:{id:${props.route.params.id}}){
 		  id
-						  title
-						  description
-						  image {
-							  id
-							  url
-						  }
-						  price
+		  highlights{
+			title
+			icon
+		  }
+		  description
+			title
+			subtitle
+			image {
+			url
+			 id
+			}
+			price
+			currency {
+				Name
+			}
 		}
 	  }
 `;
 	const { loading, error, data } = useQuery(PRODUCT);
 
 	if (loading) return <Spinner />;
+	const product = data?.products[0];
+
 	const { getCurrentUser, signOut } = React.useContext(AuthContext);
 	return (
 		<SafeAreaView style={styles.root}>
-			{/* <ScrollView> */}
-			<LinearGradient
-				style={styles.heightFix}
-				// Background Linear Gradient
-				colors={[Colors.background_gradient_1, Colors.background_gradient_2]}
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 0 }}>
-				<NavBar context={{ type: "cart" }} navigation={props.navigation} title={""} />
+			<ScrollView>
+				<LinearGradient
+					style={styles.heightFix}
+					// Background Linear Gradient
+					colors={[Colors.background_gradient_1, Colors.background_gradient_2]}
+					start={{ x: 0, y: 0 }}
+					end={{ x: 1, y: 0 }}>
+					<NavBar context={{ type: "cart" }} navigation={props.navigation} title={""} />
 
-				<Image style={styles.background_image} source={require("../assets/images/product_bg1.png")}></Image>
+					<Image style={styles.background_image} source={require("../assets/images/product_bg1.png")}></Image>
 
-				<Carousel data={data.product.image} />
+					<Carousel data={product.image} />
 
-				<View style={styles.content}>
-					<View>
-						<View style={styles.primaryContent}>
-							<Text style={styles.titlu}>Baby thanos dragut</Text>
-							<Text style={styles.subtitlu}>Editie limitata infinity war</Text>
-						</View>
-						<Text style={styles.price}>125.00 RON</Text>
-					</View>
-					<View>
-						<View style={styles.reviews}>
-							<Text>reviews go here</Text>
-						</View>
-						<View style={styles.controls}>
-							<View style={styles.qty}>
-								<Text>+-</Text>
+					<View style={styles.highlights}>{mapHighlightsToElements(product.highlights)}</View>
+
+					<View style={styles.content}>
+						<View>
+							<View style={styles.primaryContent}>
+								<Text style={styles.titlu}>{product.title}</Text>
+								<Text style={styles.subtitlu}>{product.subtitle}</Text>
 							</View>
-							<TouchableHighlight>
-								<Text style={styles.cartButton}>
-									<Text style={styles.cartButtonText}>Cart</Text>
-								</Text>
-							</TouchableHighlight>
+							<Text style={styles.price}>
+								{product.price} {product.currency.Name}
+							</Text>
+						</View>
+						<View>
+							<View style={styles.reviews}>
+								<Text></Text>
+							</View>
+							<View style={styles.controls}>
+								<InputSpinner
+									style={styles.qty}
+									height={30}
+									width={100}
+									buttonTextColor={"#000"}
+									textColor={"#000"}
+									colorRight={"#fff"}
+									colorLeft={"#fff"}
+									colorPress={"#eee"}
+									colorMax={"#fff"}
+									colorMin={"#fff"}
+									max={99}
+									min={1}
+									step={1}
+									value={count}
+									onChange={setCount}
+								/>
+
+								<TouchableHighlight
+									style={styles.cartButton}
+									onPress={() => {
+										alert("cart");
+									}}>
+									<Text>
+										<Text style={styles.cartButtonText}>Cart</Text>
+									</Text>
+								</TouchableHighlight>
+							</View>
+						</View>
+						<View style={styles.markdownContainer}>
+							<MarkdownView children={product.description.replace("/uploads", constants.serverUrl + "/uploads")} />
 						</View>
 					</View>
-				</View>
-			</LinearGradient>
-			{/* </ScrollView> */}
+				</LinearGradient>
+			</ScrollView>
 		</SafeAreaView>
 	);
 };
@@ -99,11 +139,12 @@ const styles = StyleSheet.create({
 	content: {
 		borderRadius: 35,
 		width: "100%",
-		height: 240,
 		backgroundColor: "#fff",
-		marginTop: 450,
+		marginTop: 460,
 		display: "flex",
 		flexDirection: "row",
+		marginBottom: 10,
+		flexWrap: "wrap",
 	},
 	primaryContent: {
 		padding: 25,
@@ -121,21 +162,44 @@ const styles = StyleSheet.create({
 		backgroundColor: "#000",
 		borderRadius: 20,
 		padding: 20,
-		paddingTop: 10,
-		paddingBottom: 10,
+		paddingTop: 17,
+		paddingBottom: 17,
 		width: 70,
+		left: 60,
+		position: "relative",
 	},
 	cartButtonText: { color: "#fff" },
 	controls: {
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center",
-		top: 75,
+		top: 70,
 	},
-	qty: { marginRight: 20 },
+	qty: {
+		position: "absolute",
+		right: 30,
+		borderColor: "#000",
+		borderRadius: 1,
+		borderWidth: 1,
+		borderStyle: "solid",
+		borderRadius: 100,
+	},
 	gallery: {
 		position: "absolute",
 		top: 0,
+	},
+	highlights: {
+		position: "absolute",
+		top: 400,
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-evenly",
+		width: "100%",
+	},
+	markdownContainer: {
+		paddingLeft: 25,
+		paddingRight: 25,
+		paddingBottom: 25,
 	},
 });
 

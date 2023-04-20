@@ -12,7 +12,7 @@ import Spinner from "../components/Spinner";
 import SideDrawer from "../components/SideDrawer";
 
 const Home = (props) => {
-	const [visible, setVisible] = React.useState(true);
+	const [visible, setVisible] = React.useState(false);
 
 	const openMenu = () => setVisible(true);
 	const closeMenu = () => setVisible(false);
@@ -43,7 +43,7 @@ const Home = (props) => {
 					end={{ x: 1, y: 0 }}>
 					<NavBar
 						navigation={props.navigation}
-						title={"Profile"}
+						title={""}
 						context={{
 							type: "home",
 						}}

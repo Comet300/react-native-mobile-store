@@ -4,6 +4,7 @@ import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as RootNavigation from "./app/utils/navigationRef";
+import { ToastProvider } from "react-native-toast-notifications";
 
 import Home from "./app/screens/Home";
 import Products from "./app/screens/Products";
@@ -59,7 +60,7 @@ const App = () => {
 			let user;
 			try {
 				user = await SecureStore.getItemAsync("user");
-				console.log("restoring");
+				// console.log("restoring");
 			} catch (e) {
 				// Restoring token failed
 			}
@@ -110,13 +111,15 @@ const App = () => {
 		<ApolloProvider client={Apollo}>
 			<NavigationContainer>
 				<AuthContext.Provider value={authContext}>
-					<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
-						<Stack.Screen name='Home' component={Home} />
-						<Stack.Screen name='Details' component={Products} />
-						<Stack.Screen name='ProductView' component={Productview} />
-						<Stack.Screen name='Profile' component={Profile} />
-						<Stack.Screen name='SignIn' component={SignIn} />
-					</Stack.Navigator>
+					<ToastProvider>
+						<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
+							<Stack.Screen name='Home' component={Home} />
+							<Stack.Screen name='Details' component={Products} />
+							<Stack.Screen name='ProductView' component={Productview} />
+							<Stack.Screen name='Profile' component={Profile} />
+							<Stack.Screen name='SignIn' component={SignIn} />
+						</Stack.Navigator>
+					</ToastProvider>
 				</AuthContext.Provider>
 			</NavigationContainer>
 		</ApolloProvider>

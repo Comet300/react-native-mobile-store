@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, Modal, Button, StyleSheet, TouchableWithoutFeedback } from "react-native";
 
 function mapElementsToLinks(elements, navigate, close) {
+	let n = 1;
 	return elements.map((item) => (
 		<TouchableWithoutFeedback
+			key={n++}
 			onPress={() => {
 				close();
 				navigate("Details", { category: item.id });

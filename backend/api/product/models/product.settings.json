@@ -25,7 +25,7 @@
         }
       }
     },
-    "description": {
+    "subtitle": {
       "type": "string",
       "required": true,
       "pluginOptions": {
@@ -65,7 +65,7 @@
       "via": "products",
       "collection": "category"
     },
-    "Custom_field": {
+    "highlights": {
       "type": "component",
       "repeatable": true,
       "component": "custom.custom-field",
@@ -85,6 +85,14 @@
     },
     "currency": {
       "model": "currency"
+    },
+    "description": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "richtext"
     }
   }
 }

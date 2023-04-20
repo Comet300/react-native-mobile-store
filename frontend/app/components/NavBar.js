@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
 	},
 	nothing: {
 		height: 25,
-		width: 25,
+		width: 40,
 	},
 });
 

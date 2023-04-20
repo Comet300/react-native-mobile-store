@@ -19,7 +19,7 @@ const ProductCard = (props) => {
 					<Text style={styles.productCardTitle}>{props.Title}</Text>
 				</View>
 				<View style={styles.productCardRow}>
-					<Text style={styles.productCardDescription}>{props.Description}</Text>
+					<Text style={styles.productCardDescription}>{props.Subtitle}</Text>
 				</View>
 				<View style={{ ...styles.productCardRow, ...styles.priceRow }}>
 					<Text style={styles.productCardPrice}>{props.Price}</Text>
