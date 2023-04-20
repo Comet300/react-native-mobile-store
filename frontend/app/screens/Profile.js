@@ -23,38 +23,52 @@ const Profile = (props) => {
 					<NavBar navigation={props.navigation} title={"Profile"} />
 
 					<View style={styles.content}>
-						<Image
-							style={styles.profilePic}
-							source={
-								user && user.user.profile_pic
-									? { uri: constants.serverUrl + user.user.profile_pic.formats.small.url }
-									: require(`../assets/images/generic-user.jpg`)
-							}
-						/>
+						<View style={styles.grouper}>
+							<Image
+								style={styles.profilePic}
+								source={
+									user && user.user.profile_pic
+										? { uri: constants.serverUrl + user.user.profile_pic.formats.small.url }
+										: require(`../assets/images/generic-user.jpg`)
+								}
+							/>
 
-						{user ? (
-							<>
-								<Text style={styles.name}>{user.user.name}</Text>
-								<Text style={styles.email}>{user.user.email}</Text>
-							</>
-						) : (
-							<TouchableWithoutFeedback style={styles.signIn} onPress={() => props.navigation.navigate("SignIn")}>
-								<Text style={styles.transparentButtonText}>Sign in</Text>
-							</TouchableWithoutFeedback>
-						)}
-					</View>
-					<View style={styles.actions}>
-						{user ? (
-							<TouchableWithoutFeedback
-								onPress={() => {
-									let success = signOut();
-									if (success) props.navigation.navigate("Home");
-								}}>
-								<Text style={styles.transparentButtonText}>Sign out</Text>
-							</TouchableWithoutFeedback>
-						) : (
-							<></>
-						)}
+							{user ? (
+								<>
+									<Text style={styles.email}>{user.user.email}</Text>
+									<View style={styles.actions}>
+										<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Favorites")}>
+											<Text style={styles.actionLabel}>Favorites</Text>
+										</TouchableWithoutFeedback>
+
+										{/* <TouchableWithoutFeedback onPress={() => props.navigation.navigate("Favorites")}>
+										<Text style={styles.actionLabel}>Orders</Text>
+									</TouchableWithoutFeedback>
+
+									<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Favorites")}>
+										<Text style={styles.actionLabel}>Addresses</Text>
+									</TouchableWithoutFeedback> */}
+									</View>
+								</>
+							) : (
+								<TouchableWithoutFeedback style={styles.signIn} onPress={() => props.navigation.navigate("SignIn")}>
+									<Text style={styles.transparentButtonText}>Sign in</Text>
+								</TouchableWithoutFeedback>
+							)}
+						</View>
+						<View style={{ ...styles.actions, bottom: 25 }}>
+							{user ? (
+								<TouchableWithoutFeedback
+									onPress={() => {
+										let success = signOut();
+										if (success) props.navigation.navigate("Home");
+									}}>
+									<Text style={styles.transparentButtonText}>Sign out</Text>
+								</TouchableWithoutFeedback>
+							) : (
+								<></>
+							)}
+						</View>
 					</View>
 				</LinearGradient>
 			</ScrollView>
@@ -71,7 +85,12 @@ const styles = StyleSheet.create({
 		width: "100%",
 		display: "flex",
 		alignItems: "center",
-		height: "100%",
+		flex: 1,
+		justifyContent: "space-between",
+	},
+	grouper: {
+		display: "flex",
+		alignItems: "center",
 	},
 	profilePic: {
 		height: 150,
@@ -81,22 +100,25 @@ const styles = StyleSheet.create({
 	},
 	email: {
 		fontWeight: "700",
-
 		color: "#777",
 	},
 	actions: {
 		position: "absolute",
 		bottom: 100,
-		width: "100%",
 		display: "flex",
 		alignItems: "center",
 	},
 	transparentButtonText: {
 		fontWeight: "700",
 	},
-	name: {
+	actions: {
+		marginTop: 35,
+	},
+	actionLabel: {
 		fontWeight: "700",
-		fontSize: 23,
+		marginBottom: 20,
+		textAlign: "center",
+		fontSize: 16,
 	},
 });
 

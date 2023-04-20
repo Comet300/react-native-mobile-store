@@ -1,6 +1,6 @@
 import React, { Component, useContext, useState, useCallback, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
-import { StatusBar } from "react-native";
+import { StatusBar, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as RootNavigation from "./app/utils/navigationRef";
@@ -10,6 +10,7 @@ import Home from "./app/screens/Home";
 import Products from "./app/screens/Products";
 import Spinner from "./app/components/Spinner";
 import { AuthContext } from "./app/contexts/AuthContext";
+import { CartStateProvider } from "./app/contexts/CartContext";
 import { ApolloProvider } from "@apollo/client";
 
 import Apollo from "./app/config/apollo";
@@ -22,9 +23,12 @@ import ConfirmRegister from "./app/screens/ConfirmRegister";
 import RegisterSuccess from "./app/screens/RegisterSuccess";
 import EmailSentRegister from "./app/screens/EmailSentRegister";
 import Favorites from "./app/screens/Favorites";
+import Checkout from "./app/screens/Checkout";
+import OrderConfirmation from "./app/screens/OrderConfirmation";
 
 import constants from "./app/config/constants";
 import * as Linking from "expo-linking";
+import Cart from "./app/screens/Cart";
 
 const prefix = Linking.makeUrl("/");
 
@@ -128,27 +132,32 @@ const App = () => {
 		},
 	}));
 
-	if (state?.isLoading) {
-		return <Spinner />;
-	}
+	// if (state?.isLoading) {
+	// 	return <Spinner />;
+	// }
 
 	return (
 		<ApolloProvider client={Apollo}>
 			<NavigationContainer linking={linking}>
 				<AuthContext.Provider value={authContext}>
-					<ToastProvider>
-						<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
-							<Stack.Screen name='Home' component={Home} />
-							<Stack.Screen name='Details' component={Products} />
-							<Stack.Screen name='ProductView' component={Productview} />
-							<Stack.Screen name='Profile' component={Profile} />
-							<Stack.Screen name='SignIn' component={SignIn} />
-							<Stack.Screen name='Register' component={Register} />
-							<Stack.Screen name='ConfirmRegister' component={ConfirmRegister} />
-							<Stack.Screen name='RegisterSuccess' component={RegisterSuccess} />
-							<Stack.Screen name='Favorites' component={Favorites} />
-						</Stack.Navigator>
-					</ToastProvider>
+					<CartStateProvider>
+						<ToastProvider>
+							<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
+								<Stack.Screen name='Home' component={Home} />
+								<Stack.Screen name='Details' component={Products} />
+								<Stack.Screen name='ProductView' component={Productview} />
+								<Stack.Screen name='Profile' component={Profile} />
+								<Stack.Screen name='SignIn' component={SignIn} />
+								<Stack.Screen name='Register' component={Register} />
+								<Stack.Screen name='ConfirmRegister' component={ConfirmRegister} />
+								<Stack.Screen name='RegisterSuccess' component={RegisterSuccess} />
+								<Stack.Screen name='Favorites' component={Favorites} />
+								<Stack.Screen name='Cart' component={Cart} />
+								<Stack.Screen name='Checkout' component={Checkout} />
+								<Stack.Screen name='OrderConfirmation' component={OrderConfirmation} />
+							</Stack.Navigator>
+						</ToastProvider>
+					</CartStateProvider>
 				</AuthContext.Provider>
 			</NavigationContainer>
 		</ApolloProvider>

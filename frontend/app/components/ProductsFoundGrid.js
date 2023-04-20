@@ -62,7 +62,7 @@ const ProductsFoundGrid = (props) => {
 				url
 			}
 			price
-      favorites(where:{user:${user.user.id}}){
+      favorites(where:{user:${user?.user?.id ? user?.user?.id : 0}}){
           id 
       }
 		}

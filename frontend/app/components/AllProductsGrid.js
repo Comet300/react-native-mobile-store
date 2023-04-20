@@ -9,7 +9,6 @@ import Constants from "../config/constants";
 function mapDataArray(arr, navigation, props) {
 	if (arr.length == 0) return;
 	return arr.map((item) => {
-		console.log(item.favorites[0].id);
 		return (
 			<ProductCard
 				navigation={navigation}

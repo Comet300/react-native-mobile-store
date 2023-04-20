@@ -6,6 +6,7 @@ import { MarkdownView } from "react-native-markdown-view";
 import InputSpinner from "react-native-input-spinner";
 
 import { AuthContext } from "../contexts/AuthContext";
+import { useCartState } from "../contexts/CartContext";
 
 import Colors from "../config/colors";
 import NavBar from "../components/NavBar";
@@ -23,7 +24,8 @@ function mapHighlightsToElements(highlights) {
 }
 
 const Productview = (props) => {
-	const { count, setCount } = useState(1);
+	const [count, setCount] = useState(1);
+	const [state, dispatch] = useCartState();
 
 	const PRODUCT = gql`
 	query getProduct{
@@ -75,7 +77,7 @@ const Productview = (props) => {
 						<View>
 							<View style={styles.reviews}>
 								<View>
-									<Text>Reviews go here</Text>
+									<Text></Text>
 								</View>
 							</View>
 
@@ -101,16 +103,27 @@ const Productview = (props) => {
 										min={1}
 										step={1}
 										value={count}
-										onChange={setCount}
+										onChange={(num) => setCount(num)}
 									/>
 
 									<TouchableHighlight
 										style={styles.cartButton}
 										onPress={() => {
-											alert("cart");
+											// console.log(state);
+											// console.log(count);
+											// console.log([...state, { product: props.route.params.id, qty: count }]);
+											if (state.content.filter((a) => a.product == props.route.params.id).length == 0)
+												dispatch({ content: [...state.content, { product: props.route.params.id, qty: count }] });
+											else {
+												let existingItem = state.content.filter((a) => a.product == props.route.params.id)[0];
+												existingItem.qty = existingItem.qty + count;
+												let stateCpy = { ...state };
+												stateCpy.content = stateCpy.content.filter((a) => a.product != props.route.params.id);
+												dispatch({ content: [...stateCpy.content, existingItem] });
+											}
 										}}>
 										<Text>
-											<Text style={styles.cartButtonText}>Cart</Text>
+											<Text style={styles.cartButtonText}>Add</Text>
 										</Text>
 									</TouchableHighlight>
 								</View>

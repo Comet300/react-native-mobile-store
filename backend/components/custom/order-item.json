@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_custom_order_items",
+  "info": {
+    "name": "OrderItem",
+    "icon": "hashtag",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "product": {
+      "model": "product"
+    },
+    "qty": {
+      "type": "integer"
+    }
+  }
+}

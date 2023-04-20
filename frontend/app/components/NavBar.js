@@ -1,10 +1,15 @@
-import React from "react";
-import { View, Image, Text, StyleSheet, TouchableHighlight, TouchableWithoutFeedback } from "react-native";
+import React, { useContext, useState } from "react";
+import { View, Image, Text, StyleSheet, TouchableHighlight, TouchableWithoutFeedback, ScrollView, Dimensions } from "react-native";
+import { Badge } from "react-native-paper";
+
+import { useCartState } from "../contexts/CartContext";
 import { AuthContext } from "../contexts/AuthContext";
 import constants from "../config/constants";
 
 const Navbar = (props) => {
 	const { getCurrentUser } = React.useContext(AuthContext);
+	const [cartState, dispatchCartState] = useCartState();
+
 	const user = getCurrentUser();
 	if (props.context?.type == "home") {
 		return (
@@ -51,7 +56,7 @@ const Navbar = (props) => {
 				<View style={styles.NavbarTitle}>
 					<Text style={styles.NavbarTitleText}>{props.title}</Text>
 				</View>
-				<ContextItem user={user} context={props.context} navigate={navigate} />
+				<ContextItem user={user} context={props.context} navigate={navigate} cartState={cartState} navigation={props.navigation} />
 			</View>
 		);
 	}
@@ -83,9 +88,27 @@ const ContextItem = (props) => {
 		);
 	} else if (props.context?.type === "cart") {
 		return (
-			<TouchableHighlight underlayColor='#ffffff66' onPress={() => alert("hi")} style={{ ...styles.contextItem, ...styles.menuContext }}>
-				<Image style={styles.menu} source={require("./../assets/icons/bag.png")} />
-			</TouchableHighlight>
+			<View>
+				<TouchableHighlight
+					underlayColor='#ffffff66'
+					onPress={() => {
+						props.navigation.navigate("Cart");
+					}}
+					style={{ ...styles.contextItem, ...styles.menuContext, ...styles.shoppingBagFix }}>
+					<>
+						{props.cartState?.content.length > 0 ? (
+							<Badge style={styles.cartBadge} size={17}>
+								{props.cartState.content.reduce((total, curr) => total + curr.qty, 0)}
+							</Badge>
+						) : (
+							<></>
+						)}
+						<Image style={styles.menu} source={require("./../assets/icons/bag.png")} />
+					</>
+				</TouchableHighlight>
+
+				{props.showCartPreview ? <ProductCartPreview navigation={props.navigation} products={props.products} /> : <></>}
+			</View>
 		);
 	} else return <View style={styles.nothing}></View>;
 };
@@ -133,7 +156,6 @@ const styles = StyleSheet.create({
 	contextItem: {
 		height: 40,
 		width: 40,
-		overflow: "hidden",
 		display: "flex",
 		alignItems: "center",
 		justifyContent: "center",
@@ -144,6 +166,7 @@ const styles = StyleSheet.create({
 	profile: {
 		height: 40,
 		width: 40,
+		borderRadius: 5,
 	},
 	menu: {
 		height: 25,
@@ -152,6 +175,15 @@ const styles = StyleSheet.create({
 	nothing: {
 		height: 25,
 		width: 40,
+	},
+	cartBadge: {
+		position: "absolute",
+		zIndex: 50,
+		right: 0,
+		bottom: 0,
+	},
+	shoppingBagFix: {
+		top: 10,
 	},
 });
 

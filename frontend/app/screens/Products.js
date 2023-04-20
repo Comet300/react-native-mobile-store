@@ -10,6 +10,7 @@ import FilterButton from "../components/FilterButton";
 import ProductsFoundGrid from "../components/ProductsFoundGrid";
 import ModalCard from "../components/ModalCard";
 import { AuthContext } from "../contexts/AuthContext";
+import { useCartState } from "../contexts/CartContext";
 import Spinner from "../components/Spinner";
 import AllProductsGrid from "../components/AllProductsGrid";
 
@@ -23,6 +24,10 @@ function resolveOperator(operator) {
 
 const Products = (props) => {
 	const { getCurrentUser } = React.useContext(AuthContext);
+	const [state, dispatch] = useCartState();
+
+	// console.log("sate:", state);
+
 	const user = getCurrentUser();
 
 	const ALL_PRODUCTS = gql`
@@ -106,7 +111,7 @@ const Products = (props) => {
 	};
 
 	const onConfirm = (data) => {
-		console.log("Pressed!");
+		// console.log("Pressed!");
 		closeModal();
 	};
 
@@ -119,7 +124,7 @@ const Products = (props) => {
 				<LinearGradient style={styles.heightFix} colors={[Colors.background_gradient_1, Colors.background_gradient_2]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
 					<NavBar
 						navigation={props.navigation}
-						title={"Search Product"}
+						title={"Products"}
 						context={{
 							type: "cart",
 						}}

@@ -20,14 +20,13 @@ const CarouselOfCards = (props) => {
 						key={item.id}
 						onToggleFav={() => {
 							props.refetch();
-							console.log("refetch");
 						}}
 						Title={item.title}
 						Subtitle={item.subtitle}
 						Image={{ uri: constants.serverUrl + item.image[0].url }}
 						Price={item.price + " " + item.currency.Name}
 						id={item.id}
-						IsOnFavorites={item.favorites.length > 0}
+						IsOnFavorites={item?.favorites.length > 0}
 						FavoriteId={item.favorites[0]?.id}
 					/>
 				);

@@ -71,19 +71,19 @@ const Home = (props) => {
 	`;
 
 	const categoriesData = useQuery(CATEGORIES);
+
 	const homepage = useQuery(HOMEPAGE, {
 		variables: {
 			user: user?.user ? user.user.id : 0,
 		},
-		fetchPolicy: "no-cache",
+		fetchPolicy: "network-only",
 	});
-
 	const [visible, setVisible] = React.useState(false);
-	// const [carouselState, setCarouselState] = useState({ activeIndex: 0, carouselItems: [] });
 
 	if (categoriesData.loading || homepage.loading) return <Spinner />;
-	// setCarouselState({ ...carouselState, carouselItems: homepage.data.homepage.jumbotron });
-	let urlOfImages = [];
+
+	const openMenu = () => setVisible(true);
+	const closeMenu = () => setVisible(false);
 
 	let preFetchTasks = [];
 	homepage.data.homepage.jumbotron.forEach((p) => {
@@ -92,19 +92,10 @@ const Home = (props) => {
 
 	Promise.all(preFetchTasks);
 
-	const openMenu = () => setVisible(true);
-	const closeMenu = () => setVisible(false);
-
-	const goToScreen = () => props.navigation.navigate("Favorites");
-
 	const renderJumbotronItem = ({ item, index }) => {
 		return (
 			<View style={styles.jumbotronImageWrap}>
-				<Image
-					style={styles.jumbotronImage}
-					source={{ uri: constants.serverUrl + item.url }}
-					resizeMode={"cover"} // cover or contain its upto you view look
-				/>
+				<Image style={styles.jumbotronImage} source={{ uri: constants.serverUrl + item.url }} resizeMode={"cover"} />
 			</View>
 		);
 	};
@@ -122,7 +113,6 @@ const Home = (props) => {
 						}}
 						onMenuClick={openMenu}
 					/>
-
 					<View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}>
 						<Carousel
 							swipeThreshold={5}
@@ -153,8 +143,6 @@ const Home = (props) => {
 							}}
 							elements={homepage.data.homepage.ourRecommendation}></CarouselOfCards>
 					</View>
-
-					<Button title='Test screen' onPress={goToScreen}></Button>
 				</LinearGradient>
 			</ScrollView>
 		</SafeAreaView>
