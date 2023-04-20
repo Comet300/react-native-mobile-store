@@ -91,7 +91,7 @@ const CartMenu = (props) => {
 							} else {
 								dispatchCartState({ content: [] });
 							}
-							props.onRequestClose(0);
+							props.onRequestClose();
 						}}>
 						<View style={styles.menuOption}>
 							<Image source={require("./../assets/icons/close.png")} style={styles.icon} />

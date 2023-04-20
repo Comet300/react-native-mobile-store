@@ -28,27 +28,26 @@ const Productview = (props) => {
 	const [state, dispatch] = useCartState();
 
 	const PRODUCT = gql`
-	query getProduct{
-		products(where:{id:${props.route.params.id}}){
-		  id
-		  highlights{
-			title
-			icon
-		  }
-		  description
-			title
-			subtitle
-			image {
-			url
-			 id
+		query getProduct{
+			products(where:{id:${props.route.params.id}}){
+			id
+			highlights{
+				title
+				icon
 			}
-			price
-			currency {
-				Name
+			description
+				title
+				subtitle
+				image {
+				url
+				id
+				}
+				price
+				currency {
+					Name
+				}
 			}
-		}
-	  }
-`;
+		}`;
 	const { loading, error, data } = useQuery(PRODUCT);
 
 	if (loading) return <Spinner />;
@@ -64,7 +63,6 @@ const Productview = (props) => {
 					<Image style={styles.background_image} source={require("../assets/images/product_bg1.png")}></Image>
 
 					<Carousel data={product.image} />
-
 					<View style={styles.highlights}>{mapHighlightsToElements(product.highlights)}</View>
 
 					<View style={styles.content}>

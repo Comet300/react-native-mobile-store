@@ -38,9 +38,7 @@ const Favorites = (props) => {
 					}
 				  }
 			}
-		  }
-	`;
-
+		  }`;
 		const { loading, error, data, refetch } = useQuery(FAVORITES, {
 			fetchPolicy: "no-cache",
 		});

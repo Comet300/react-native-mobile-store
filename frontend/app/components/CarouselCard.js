@@ -59,9 +59,18 @@ const CarouselCard = (props) => {
 						onPress={() => {
 							if (user?.jwt) {
 								if (favState) {
-									removeFavorite({ variables: { id: props.FavoriteId }, onCompleted: props.onToggleFav() });
+									removeFavorite({
+										variables: { id: props.FavoriteId },
+										onCompleted: props.onToggleFav(),
+									});
 								} else {
-									addFavorite({ variables: { user: user.user.id, product: props.id }, onCompleted: props.onToggleFav() });
+									addFavorite({
+										variables: {
+											user: user.user.id,
+											product: props.id,
+										},
+										onCompleted: props.onToggleFav(),
+									});
 								}
 								setFavState(!favState);
 							} else {

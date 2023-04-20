@@ -15,7 +15,7 @@ const Slide = ({ data }) => {
 				justifyContent: "center",
 				alignItems: "center",
 			}}>
-			<Image resizeMode='contain' source={{ uri: constants.serverUrl + data.url }} style={{ width: windowWidth, height: windowHeight * 0.45 }}></Image>
+			<Image resizeMode='contain' source={{ uri: constants.serverUrl + data.url }} style={{ width: windowWidth, height: windowHeight * 0.45 }} />
 		</View>
 	);
 };

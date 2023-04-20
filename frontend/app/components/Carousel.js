@@ -8,15 +8,14 @@ const Carousel = ({ data }) => {
 	const [index, setIndex] = useState(0);
 	const indexRef = useRef(index);
 	indexRef.current = index;
+
 	const onScroll = useCallback((event) => {
 		const slideSize = event.nativeEvent.layoutMeasurement.width;
 		const index = event.nativeEvent.contentOffset.x / slideSize;
 		const roundIndex = Math.round(index);
 
 		const distance = Math.abs(roundIndex - index);
-
 		const isNoMansLand = 0.4 < distance;
-
 		if (roundIndex !== indexRef.current && !isNoMansLand) {
 			setIndex(roundIndex);
 		}

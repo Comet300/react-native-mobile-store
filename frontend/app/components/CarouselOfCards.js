@@ -4,7 +4,6 @@ import { View, StyleSheet, SectionList, FlatList, Dimensions } from "react-nativ
 import CarouselCard from "../components/CarouselCard";
 import ProductCard from "./ProductCard";
 
-import Constants from "../config/constants";
 import constants from "../config/constants";
 
 const CarouselOfCards = (props) => {
